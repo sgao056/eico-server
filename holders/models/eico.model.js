@@ -49,7 +49,6 @@ Eico.getAll = (title, result) => {
 
 
 Eico.create = (newEico, result) => {
-  console.log(newEico.wallet)
   sql.query(`INSERT INTO HOLDERS (wallet, email, resource , holdingNumbers, claimed) VALUES(${newEico.wallet},${newEico.email},${newEico.resource},${newEico.holdingNumbers},${newEico.claimed})`, (err, res) => {
     if (err) {
       console.log("error: ", err);

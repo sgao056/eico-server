@@ -1,6 +1,6 @@
 module.exports = {
-  HOST: "localhost",
-  USER: "root",
-  PASSWORD: "123456",
-  DB: "testdb"
+  HOST: "db4free.net",
+  USER: "shanggao",
+  PASSWORD: "shanggao",
+  DB: "shangtest666"
 };

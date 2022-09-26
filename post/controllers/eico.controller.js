@@ -11,9 +11,12 @@ exports.create = (req, res) => {
 
   // Create a Eico
   const eico = new Eico({
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published || false
+    delta: req.body.delta,
+    text: req.body.text,
+    created: req.body.created,
+    edited:req.body.edited,
+    pined: req.body.pined,
+    viewed: req.body.viewed,
   });
 
   // Save Eico in the database

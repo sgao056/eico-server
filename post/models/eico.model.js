@@ -2,26 +2,29 @@ const sql = require("./db.js");
 
 // constructor
 const Eico = function(eico) {
-  this.title = eico.title;
-  this.description = eico.description;
-  this.published = eico.published;
-};
+  this.delta = eico.delta;
+  this.text = eico.text;
+  this.created = eico.created;
+  this.edited = eico.edited;
+  this.pined = eico.pined;
+  this.viewed = eico.viewed;
+}
 
 Eico.create = (newEico, result) => {
-  sql.query("INSERT INTO eico SET ?", newEico, (err, res) => {
+  sql.query(`INSERT INTO POSTS (delta, text, created, edited, viewed, pined) VALUES(${newEico.delta},${newEico.text},${newEico.created},${newEico.edited},${newEico.viewed},${newEico.pined})`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    console.log("created eico: ", { id: res.insertId, ...newEico });
-    result(null, { id: res.insertId, ...newEico });
+    console.log("created post: ",newEico);
+    result(null, newEico);
   });
 };
 
 Eico.findById = (id, result) => {
-  sql.query(`SELECT * FROM eico WHERE id = ${id}`, (err, res) => {
+  sql.query(`SELECT * FROM POSTS WHERE id = ${id}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -29,8 +32,8 @@ Eico.findById = (id, result) => {
     }
 
     if (res.length) {
-      console.log("found eico: ", res[0]);
-      result(null, res[0]);
+      console.log("found post: ", res[0]);
+      result(null,res[0]);
       return;
     }
 
@@ -40,7 +43,7 @@ Eico.findById = (id, result) => {
 };
 
 Eico.getAll = (title, result) => {
-  let query = "SELECT * FROM eico";
+  let query = "SELECT * FROM POSTS";
 
   if (title) {
     query += ` WHERE title LIKE '%${title}%'`;
@@ -53,28 +56,14 @@ Eico.getAll = (title, result) => {
       return;
     }
 
-    console.log("eico: ", res);
-    result(null, res);
-  });
-};
-
-Eico.getAllPublished = result => {
-  sql.query("SELECT * FROM eico WHERE published=true", (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    console.log("eico: ", res);
+    console.log("posts: ", res);
     result(null, res);
   });
 };
 
 Eico.updateById = (id, eico, result) => {
   sql.query(
-    "UPDATE eico SET title = ?, description = ?, published = ? WHERE id = ?",
-    [eico.title, eico.description, eico.published, id],
+    `UPDATE POSTS SET delta = ${eico.delta}, text = ${eico.text}, created = ${eico.created}, edited = ${eico.edited}, pined = ${eico.pined}, viewed = ${eico.viewed} WHERE id = ${id}`,
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -88,14 +77,14 @@ Eico.updateById = (id, eico, result) => {
         return;
       }
 
-      console.log("updated eico: ", { id: id, ...eico });
+      console.log("updated posts: ", { id: id, ...eico });
       result(null, { id: id, ...eico });
     }
   );
 };
 
 Eico.remove = (id, result) => {
-  sql.query("DELETE FROM eico WHERE id = ?", id, (err, res) => {
+  sql.query("DELETE FROM POSTS WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -108,20 +97,20 @@ Eico.remove = (id, result) => {
       return;
     }
 
-    console.log("deleted eico with id: ", id);
+    console.log("deleted post with id: ", id);
     result(null, res);
   });
 };
 
 Eico.removeAll = result => {
-  sql.query("DELETE FROM eico", (err, res) => {
+  sql.query("DELETE FROM POSTS", (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
 
-    console.log(`deleted ${res.affectedRows} eico`);
+    console.log(`deleted ${res.affectedRows} posts`);
     result(null, res);
   });
 };

@@ -1,28 +1,33 @@
+const express = require('express')
+const Busboy = require('busboy')
+const path = require('path')
+const fs = require('fs')
+
 module.exports = app => {
   const eico = require("../controllers/eico.controller.js");
-
   var router = require("express").Router();
 
-  // Create a new Eico
-  router.post("/upload", eico.create);
+  router.post('/upload', (req, res) => {
+    const busboy = Busboy({ headers: req.headers });
+    busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+      console.log(filename)
+      const saveTo = path.join(__dirname, 'media', filename.filename);
+      file.pipe(fs.createWriteStream(saveTo));
+    });
+  
+    busboy.on('finish', function () {
+      res.send("Upload successfully!");
+    });
+  
+    return req.pipe(busboy);
+  });
 
-  // Retrieve all Eicos
-  router.get("/upload", eico.findAll);
+  router.get('/upload', (req, res) => {
+    const image = app.use('/img', express.static(__dirname + '/media/blog1.jpg'));
+    console.log(image)
+  });
 
-  // Retrieve all published Eicos
-  // router.get("/published", eico.findAllPublished);
-
-  // Retrieve a single Eico with id
-  router.get("/upload/:id", eico.findOne);
-
-  // Update a Eico with id
-  router.put("/upload/:id", eico.update);
-
-  // Delete a Eico with id
-  router.delete("/upload/:id", eico.delete);
-
-  // Delete all Eicos
-  router.delete("/upload/", eico.deleteAll);
+  // router.get("/upload/:id", eico.findOne);
 
   app.use('/api/eico', router);
 };
