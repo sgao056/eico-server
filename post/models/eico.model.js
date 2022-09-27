@@ -11,7 +11,7 @@ const Eico = function(eico) {
 }
 
 Eico.create = (newEico, result) => {
-  sql.query(`INSERT INTO POSTS (delta, text, created, edited, viewed, pined) VALUES(${newEico.delta},${newEico.text},${newEico.created},${newEico.edited},${newEico.viewed},${newEico.pined})`, (err, res) => {
+  sql.query("INSERT INTO POSTS SET ?",newEico, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -33,11 +33,10 @@ Eico.findById = (id, result) => {
 
     if (res.length) {
       console.log("found post: ", res[0]);
-      result(null,res[0]);
+      result(null,{...res[0],pined:res[0].pined===1?true:false});
       return;
     }
 
-    // not found Eico with the id
     result({ kind: "not_found" }, null);
   });
 };
@@ -57,13 +56,17 @@ Eico.getAll = (title, result) => {
     }
 
     console.log("posts: ", res);
-    result(null, res);
+    res.forEach(item=>{
+      item.pined = item.pined === 1 ? true : false
+    })
+    result(null,res);
   });
 };
 
 Eico.updateById = (id, eico, result) => {
   sql.query(
-    `UPDATE POSTS SET delta = ${eico.delta}, text = ${eico.text}, created = ${eico.created}, edited = ${eico.edited}, pined = ${eico.pined}, viewed = ${eico.viewed} WHERE id = ${id}`,
+    "UPDATE POSTS SET delta = ?, text = ?, edited = ?, created = ?, viewed = ?, pined= ? WHERE id = ?",
+    [eico.delta, eico.text, eico.edited, eico.created, eico.viewed, eico.pined, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);

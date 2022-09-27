@@ -12,7 +12,7 @@
     "mysql",
     "restapi"
   ],
-  "author": "bezkoder",
+  "author": "shang",
   "license": "ISC",
   "dependencies": {
     "busboy": "^1.6.0",

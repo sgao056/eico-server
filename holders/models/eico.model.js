@@ -19,7 +19,7 @@ Eico.findById = (id, result) => {
 
     if (res.length) {
       console.log("found holder: ", res[0]);
-      result(null, res[0]);
+      result(null, {...res[0],claimed:res[0].claimed===1?true:false});
       return;
     }
 
@@ -43,13 +43,16 @@ Eico.getAll = (title, result) => {
     }
 
     console.log("holders: ", res);
-    result(null, res);
+    res.forEach(item=>{
+      item.claimed = item.claimed === 1 ? true : false
+    })
+    result(null,res);
   });
 };
 
 
 Eico.create = (newEico, result) => {
-  sql.query(`INSERT INTO HOLDERS (wallet, email, resource , holdingNumbers, claimed) VALUES(${newEico.wallet},${newEico.email},${newEico.resource},${newEico.holdingNumbers},${newEico.claimed})`, (err, res) => {
+  sql.query("INSERT INTO HOLDERS SET ?",newEico, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -63,7 +66,8 @@ Eico.create = (newEico, result) => {
 
 Eico.updateById = (id, eico, result) => {
   sql.query(
-    `UPDATE HOLDERS SET wallet = ${eico.wallet}, email = ${eico.email}, resource = ${eico.resource}, holdingNumbers = ${eico.holdingNumbers}, claimed = ${eico.claimed} WHERE id = ${id}`,
+    "UPDATE HOLDERS SET wallet = ?, email = ?, resource = ?, holdingNumbers = ?, claimed = ? WHERE id = ?",
+    [eico.wallet, eico.email, eico.resource, eico.holdingNumbers, eico.claimed, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);

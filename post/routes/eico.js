@@ -15,5 +15,5 @@ module.exports = app => {
 
   router.delete("/post/", eico.deleteAll);
 
-  app.use('/api/eico', router);
+  app.use('/', router);
 };

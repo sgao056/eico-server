@@ -24,5 +24,5 @@ module.exports = app => {
   // Delete all Eicos
   router.delete("/holders/", eico.deleteAll);
 
-  app.use('/api/eico', router);
+  app.use('/', router);
 };
