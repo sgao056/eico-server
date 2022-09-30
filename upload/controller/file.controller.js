@@ -132,30 +132,65 @@ const removeById = (req, res) => {
       console.log(data)
       const fileName = data.name;
       const directoryPath = __basedir + "/upload/media/";
-      fs.unlink(directoryPath + fileName, (err) => {
-        if (err) {
-          res.status(500).send({
-            message: "Could not delete the file. " + err,
-          });
-        }
+      fs.stat(`${directoryPath + fileName}.jpg`, function (err, stats) {
+          if(stats){
+            fs.unlink(`${directoryPath + fileName}.jpg`, (err) => {
+              if (err) {
+                res.status(500).send({
+                  message: "Could not delete the file. " + err,
+                });
+              }
+      
+              res.status(200).send({
+                message: "File is deleted.",
+              });
+            });
+            Eico.remove(req.params.id, (err, data) => {
+              if (err) {
+                if (err.kind === "not_found") {
+                  res.status(404).send({
+                    message: `Not found Eico with id ${req.params.id}.`
+                  });
+                } else {
+                  res.status(500).send({
+                    message: "Could not delete Eico with id " + req.params.id
+                  });
+                }
+              } else res.send({ message: `Eico was deleted successfully!` });
+            });
+            return;
+          }       
+      })
 
-        res.status(200).send({
-          message: "File is deleted.",
-        });
-      });
-      Eico.remove(req.params.id, (err, data) => {
-        if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Not found Eico with id ${req.params.id}.`
+      fs.stat(`${directoryPath + fileName}.mp4`, function (err, stats) {
+        if(stats){
+          fs.unlink(`${directoryPath + fileName}.mp4`, (err) => {
+            if (err) {
+              res.status(500).send({
+                message: "Could not delete the file. " + err,
+              });
+            }
+    
+            res.status(200).send({
+              message: "File is deleted.",
             });
-          } else {
-            res.status(500).send({
-              message: "Could not delete Eico with id " + req.params.id
-            });
-          }
-        } else res.send({ message: `Eico was deleted successfully!` });
-      });
+          });
+          Eico.remove(req.params.id, (err, data) => {
+            if (err) {
+              if (err.kind === "not_found") {
+                res.status(404).send({
+                  message: `Not found Eico with id ${req.params.id}.`
+                });
+              } else {
+                res.status(500).send({
+                  message: "Could not delete Eico with id " + req.params.id
+                });
+              }
+            } else res.send({ message: `Eico was deleted successfully!` });
+          });
+          return;
+        }       
+    })
     };
   });
 };
