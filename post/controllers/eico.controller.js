@@ -17,6 +17,7 @@ exports.create = (req, res) => {
     edited:req.body.edited,
     pined: req.body.pined,
     viewed: req.body.viewed,
+    drafted:req.body.drafted
   });
 
   // Save Eico in the database
@@ -93,7 +94,7 @@ exports.update = (req, res) => {
           res.status(404).send({
             message: `Not found Eico with id ${req.params.id}.`
           });
-        } else {
+        } else {gi
           res.status(500).send({
             message: "Error updating Eico with id " + req.params.id
           });
@@ -129,5 +130,16 @@ exports.deleteAll = (req, res) => {
           err.message || "Some error occurred while removing all eico."
       });
     else res.send({ message: `All Eicos were deleted successfully!` });
+  });
+};
+
+exports.deleteDraft = (req, res) => {
+  Eico.clearDraft((err, data) => {
+    if (err)
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while removing all eico."
+    });
+    else res.send({ message: `All Drafts were deleted successfully!` });
   });
 };

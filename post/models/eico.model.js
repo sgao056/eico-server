@@ -8,6 +8,7 @@ const Eico = function(eico) {
   this.edited = eico.edited;
   this.pined = eico.pined;
   this.viewed = eico.viewed;
+  this.drafted = eico.drafted;
 }
 
 Eico.create = (newEico, result) => {
@@ -33,7 +34,11 @@ Eico.findById = (id, result) => {
 
     if (res.length) {
       console.log("found post: ", res[0]);
-      result(null,{...res[0],pined:res[0].pined===1?true:false});
+      result(null,{
+        ...res[0],
+        pined:res[0].pined===1?true:false,
+        drafted:res[0].drafted===1?true:false
+      });
       return;
     }
 
@@ -58,6 +63,7 @@ Eico.getAll = (title, result) => {
     console.log("posts: ", res);
     res.forEach(item=>{
       item.pined = item.pined === 1 ? true : false
+      item.drafted = item.drafted === 1 ? true : false
     })
     result(null,res);
   });
@@ -65,8 +71,8 @@ Eico.getAll = (title, result) => {
 
 Eico.updateById = (id, eico, result) => {
   sql.query(
-    "UPDATE POSTS SET delta = ?, text = ?, edited = ?, created = ?, viewed = ?, pined= ? WHERE id = ?",
-    [eico.delta, eico.text, eico.edited, eico.created, eico.viewed, eico.pined, id],
+    "UPDATE POSTS SET delta = ?, text = ?, edited = ?, created = ?, viewed = ?, pined= ?, drafted = ? WHERE id = ?",
+    [eico.delta, eico.text, eico.edited, eico.created, eico.viewed, eico.pined, eico.drafted, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -114,6 +120,18 @@ Eico.removeAll = result => {
     }
 
     console.log(`deleted ${res.affectedRows} posts`);
+    result(null, res);
+  });
+};
+
+Eico.clearDraft = (result) => {
+  console.log(result)
+  sql.query(`DELETE FROM POSTS WHERE drafted = 1 `,(err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
     result(null, res);
   });
 };

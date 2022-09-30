@@ -11,7 +11,7 @@ var corsOptions = {
 global.__basedir = __dirname;
 
 app.use(cors(corsOptions));
-
+app.use(express.static('upload/media'));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 

@@ -36,6 +36,24 @@ Eico.findById = (id, result) => {
   });
 };
 
+Eico.findByBlogId = (postId, result) => {
+  sql.query(`SELECT * FROM UPLOADS WHERE postId = ${postId}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found upload: ", res);
+      result(null,res);
+      return;
+    }
+
+    result({ kind: "not_found" }, null);
+  });
+};
+
 Eico.getAll = (result) => {
   let query = "SELECT * FROM UPLOADS";
 
@@ -74,7 +92,7 @@ Eico.updateById = (id, eico, result) => {
   );
 };
 
-Eico.remove = (id, result) => {
+Eico.removeById = (id, result) => {
   sql.query("DELETE FROM UPLOADS WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -89,6 +107,25 @@ Eico.remove = (id, result) => {
     }
 
     console.log("deleted upload with id: ", id);
+    result(null, res);
+  });
+};
+
+Eico.removeBlog = (postId, result) => {
+  sql.query("DELETE FROM UPLOADS WHERE postId = ?", postId, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      // not found Eico with the id
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("deleted upload with id: ", postId);
     result(null, res);
   });
 };

@@ -11,9 +11,11 @@ module.exports = app => {
 
   router.put("/post/:id", eico.update);
 
+  router.delete("/post/draft", eico.deleteDraft);
+
   router.delete("/post/:id", eico.delete);
 
   router.delete("/post/", eico.deleteAll);
-
+  
   app.use('/', router);
 };
