@@ -94,7 +94,7 @@ exports.update = (req, res) => {
           res.status(404).send({
             message: `Not found Eico with id ${req.params.id}.`
           });
-        } else {gi
+        } else {
           res.status(500).send({
             message: "Error updating Eico with id " + req.params.id
           });
