@@ -117,6 +117,7 @@ const uploadVideo = async (req, res) => {
 };
 
 const removeById = (req, res) => {
+  console.log(req.header)
   Eico.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {

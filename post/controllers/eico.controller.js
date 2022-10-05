@@ -106,6 +106,7 @@ exports.update = (req, res) => {
 
 // Delete a Eico with the specified id in the request
 exports.delete = (req, res) => {
+  console.log(req.headers.authorization)
   Eico.remove(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
