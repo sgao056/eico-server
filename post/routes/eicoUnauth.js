@@ -3,6 +3,7 @@ module.exports = app => {
 
   var router = require("express").Router();
 
+ 
   router.get("/post", eico.findAll);
 
   router.get("/post/:id", eico.findOne);

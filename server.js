@@ -21,64 +21,28 @@ app.use(express.static('upload/media'));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname,'./index.html'))
 });
 
-app.get("/secret", async (req, res)=>{
 
-  // await Moralis.start({ apiKey:"FqPGPZIsDKU7mF8MIniFlCQTPDcb5WIPIdXEP7Rneak0QU1IVuO98AcMQQ0em98S" }).then(
-  //   async ()=>{
-  //     console.log(await Moralis.Auth.verify(
-  //       {
-  //         message: {
-  //           label:"Message",
-  //           type:"text",
-  //           placeholder:"Message to sign!"
-  //         },
-  //         signature:{
-  //           label:"Signature",
-  //           type:"text",
-  //           placeholder:"0x7d851598770874678aa16b6f8ef98f9649dc079a4e84d0e1380e137b536068d45d52ecccc974f0b659c1e6ebcf9cb5370dfb4d2a1b804fe279214511973e32681c"
-  //         },
-  //         network: "evm"
-  //       }
-  //     ))
-  //   }
-  // )
-
-  // await Moralis.start({ serverUrl, appId, moralisSecret });
-  // console.log(Moralis)
-  // const response = await Moralis.Auth.verify({
-  //   network:"goerli",
-  //   message:req.query.message,
-  //   signature:req.query.signature,
-  // })
-  // .then(res=>{
-  //   console.log(res)
-  //   require("./holders/routes/eicoAuth.js")(app);
-  //   require("./post/routes/eicoAuth.js")(app);
-  //   require("./upload/routes/eico.js")(app);  
-  // })
-
-  // let address = await web3.eth.accounts.recover("Message to sign", req.query.signature)
-  // let loger = logger.info(address)
-  // console.log(`address:${address}`, `signature:${req.query.signature}`)
-  // console.log(loger)
-  let balance = Number(await contract.methods.balanceOf(req.query.wallet,1).call())
-  console.log(req.query.wallet)
-
-  if(balance>0){
-    res.send({massage:'SECRET MESSAGE'}) 
-      require("./holders/routes/eicoAuth.js")(app);
-      require("./post/routes/eicoAuth.js")(app);
-      require("./upload/routes/eico.js")(app);  
+app.post("/secret", async (req, res)=>{
+  if(req.query.data && req.query.signature){
+    var data = req.query.data.replace("\\n", "\n").replace("\\n", "\n"); 
+    let address = await web3.eth.accounts.recover(data, req.query.signature)
+    console.log(address.toLowerCase())
+    gi
   }
   else{
-    res.send('NOT AVAILABLE')
+    res.status(403).send({massage:"Unauthorized"})
   }
 })
 
+
+require("./holders/routes/eicoAuth.js")(app);
+require("./post/routes/eicoAuth.js")(app);
+require("./upload/routes/eico.js")(app);  
 require("./holders/routes/eicoUnauth.js")(app);
 require("./post/routes/eicoUnauth.js")(app);
 
