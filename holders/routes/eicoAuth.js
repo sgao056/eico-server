@@ -3,17 +3,8 @@ module.exports = app => {
 
   var router = require("express").Router();
 
-  // Retrieve all Eicos
-  router.get("/holders", eico.findAll);
-
   // Create a new Eico
   router.post("/holders", eico.create);
-
-  // Retrieve all published Eicos
-  // router.get("/published", eico.findAllPublished);
-
-  // Retrieve a single Eico with id
-  router.get("/holders/:id", eico.findOne);
 
   // Update a Eico with id
   router.put("/holders/:id", eico.update);
