@@ -32,7 +32,7 @@ app.post("/secret", async (req, res)=>{
     var data = req.query.data.replace("\\n", "\n").replace("\\n", "\n"); 
     let address = await web3.eth.accounts.recover(data, req.query.signature)
     console.log(address.toLowerCase())
-    gi
+    exports.wallet = address.toLowerCase()
   }
   else{
     res.status(403).send({massage:"Unauthorized"})

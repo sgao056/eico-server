@@ -2,6 +2,7 @@ const wallet = require('../../server.js')
 module.exports = app => {
 
   const authUser = (req, res, next) => {
+    console.log(req.body.wallet,wallet)
     if(req.body.wallet === wallet.wallet){
       next();
     }
