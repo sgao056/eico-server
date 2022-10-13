@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const Web3 = require("web3");
+const jwt = require("jsonwebtoken")
 const { logger } = require("ethers");
 
 const Moralis = require("moralis").default
@@ -30,14 +31,26 @@ app.get("/", (req, res) => {
 app.post("/secret", async (req, res)=>{
   if(req.query.data && req.query.signature){
     var data = req.query.data.replace("\\n", "\n").replace("\\n", "\n"); 
-    let address = await web3.eth.accounts.recover(data, req.query.signature)
-    console.log(address.toLowerCase())
-    exports.wallet = address.toLowerCase()
+    let wallet = await web3.eth.accounts.recover(data, req.query.signature)
+    console.log(wallet.toLowerCase())
+    const accessToken = generateAccessToken({wallet});
+    exports.wallet = wallet.toLowerCase()
+    res.json({
+      wallet,
+      accessToken
+    })    
   }
   else{
     res.status(403).send({massage:"Unauthorized"})
   }
 })
+
+
+const generateAccessToken = (user) => {
+  return jwt.sign({ wallet: user.wallet }, "mySecretKey", {
+    expiresIn: "3600s",
+  });
+};
 
 
 require("./holders/routes/eicoAuth.js")(app);
