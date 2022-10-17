@@ -32,9 +32,7 @@ app.post("/secret", async (req, res)=>{
   if(req.query.data && req.query.signature){
     var data = req.query.data.replace("\\n", "\n").replace("\\n", "\n"); 
     let wallet = await web3.eth.accounts.recover(data, req.query.signature)
-    console.log(wallet.toLowerCase())
     const accessToken = generateAccessToken({wallet});
-    exports.wallet = wallet.toLowerCase()
     res.json({
       wallet,
       accessToken

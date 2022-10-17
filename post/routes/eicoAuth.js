@@ -1,4 +1,3 @@
-const wallet = require('../../server.js')
 const jwt = require('jsonwebtoken')
 module.exports = app => {
   const ownerArray = [
