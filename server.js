@@ -9,7 +9,7 @@ const Moralis = require("moralis").default
 
 const app = express();
 
-const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/32d847416db047318023518fc99b727c"));
+const web3 = new Web3(new Web3.providers.HttpProvider("https://eth-mainnet.g.alchemy.com/v2/QFt2c5TIQb0NjSd7W0auMJIIMTRKXmW8"));
 
 var corsOptions = {
   origin: "https://eico.forging.one/"
