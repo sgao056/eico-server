@@ -43,25 +43,7 @@ module.exports = app => {
       res.status(401).json("You are not authenticated!");
     }
   };
-  // const authUser = (req, res, next) => {
-  //   console.log(req.body.wallet,wallet)
-  //   if(req.body.wallet === wallet.wallet){
-  //     next();
-  //   }
-  //   else{
-  //     res.status(403).send('You are not authorized to do so!')
-  //   }
-  // }
-
-  // const authOwner = (req, res, next) => {
-  //   const ownerArray = ["0x76706509011690812516c8a31fb1d9d2a38fbd9c"]
-  //   if(ownerArray.indexOf(wallet.wallet) !== -1){
-  //     next();
-  //   }
-  //   else{
-  //     res.status(403).send('You are not authorized to do so!')
-  //   }
-  // }
+  
   const eico = require("../controllers/eico.controller.js");
 
   var router = require("express").Router();
