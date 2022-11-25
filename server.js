@@ -5,14 +5,12 @@ const Web3 = require("web3");
 const jwt = require("jsonwebtoken")
 const { logger } = require("ethers");
 
-const Moralis = require("moralis").default
-
 const app = express();
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://eth-mainnet.g.alchemy.com/v2/QFt2c5TIQb0NjSd7W0auMJIIMTRKXmW8"));
 
 var corsOptions = {
-  origin: "https://eico.forging.one/"
+  origin: "http://localhost:3000"
 };
 
 global.__basedir = __dirname;
@@ -56,6 +54,7 @@ require("./post/routes/eicoAuth.js")(app);
 require("./upload/routes/eico.js")(app);  
 require("./holders/routes/eicoUnauth.js")(app);
 require("./post/routes/eicoUnauth.js")(app);
+require("./deploy/routes/eicoAuth.js")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

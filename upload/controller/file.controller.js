@@ -106,7 +106,7 @@ const uploadVideo = async (req, res) => {
 
     if (err.code == "LIMIT_FILE_SIZE") {
       return res.status(500).send({
-        message: "File size cannot be larger than 5MB!",
+        message: "File size cannot be larger than 10MB!",
       });
     }
 
